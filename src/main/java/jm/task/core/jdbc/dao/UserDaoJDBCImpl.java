@@ -6,9 +6,11 @@ import jm.task.core.jdbc.util.Util;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class UserDaoJDBCImpl implements UserDao {
     private final Connection connection;
+    private static final Logger logger = Logger.getLogger(UserDaoJDBCImpl.class.getName());
 
     public UserDaoJDBCImpl() {
         this.connection = Util.getConnection();
@@ -24,9 +26,9 @@ public class UserDaoJDBCImpl implements UserDao {
 
         try (Statement statement = connection.createStatement()) {
             statement.execute(sql);
-            System.out.println("Таблица users создана");
+            logger.info("Таблица users создана");
         } catch (SQLException e) {
-            System.err.println("Ошибка при создании таблицы: " + e.getMessage());
+            logger.severe("Ошибка при создании таблицы: " + e.getMessage());
         }
     }
 
@@ -36,9 +38,9 @@ public class UserDaoJDBCImpl implements UserDao {
 
         try (Statement statement = connection.createStatement()) {
             statement.execute(sql);
-            System.out.println("Таблица users удалена");
+            logger.info("Таблица users удалена");
         } catch (SQLException e) {
-            System.err.println("Ошибка при удалении таблицы: " + e.getMessage());
+            logger.severe("Ошибка при удалении таблицы: " + e.getMessage());
         }
     }
 
@@ -51,9 +53,9 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.setString(2, lastName);
             preparedStatement.setByte(3, age);
             preparedStatement.executeUpdate();
-            System.out.println("Пользователь сохранен: " + name + " " + lastName);
+            logger.info("Пользователь: " + name + " " + lastName + "  сохранен." );
         } catch (SQLException e) {
-            System.err.println("Ошибка при сохранении пользователя: " + e.getMessage());
+            logger.severe("Ошибка при сохранении пользователя: " + e.getMessage());
         }
     }
 
@@ -64,9 +66,9 @@ public class UserDaoJDBCImpl implements UserDao {
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
             int rowsAffected = preparedStatement.executeUpdate();
-            System.out.println("Удалено пользователей: " + rowsAffected);
+            logger.info("Удалено пользователей: " + rowsAffected);
         } catch (SQLException e) {
-            System.err.println("Ошибка при удалении пользователя: " + e.getMessage());
+            logger.severe("Ошибка при удалении пользователя: " + e.getMessage());
         }
     }
 
@@ -87,7 +89,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 users.add(user);
             }
         } catch (SQLException e) {
-            System.err.println("Ошибка при получении пользователей: " + e.getMessage());
+            logger.severe("Ошибка при получении пользователей: " + e.getMessage());
         }
 
         return users;
@@ -99,9 +101,9 @@ public class UserDaoJDBCImpl implements UserDao {
 
         try (Statement statement = connection.createStatement()) {
             statement.execute(sql);
-            System.out.println("Таблица users очищена");
+            logger.info("Таблица users очищена");
         } catch (SQLException e) {
-            System.err.println("Ошибка при очистке таблицы: " + e.getMessage());
+            logger.severe("Ошибка при очистке таблицы: " + e.getMessage());
         }
     }
 }
